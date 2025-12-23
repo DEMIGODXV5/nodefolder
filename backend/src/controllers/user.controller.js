@@ -37,6 +37,65 @@ const registerUser=async(req,res) => {
     }
 };
 
+
+
+const loginUser=async(req,res) => {
+    // login user logic will go here
+    try {
+        //check if user alreafy exists
+        const{email,password}=req.body;
+
+        //1 validate input
+        if(!email || !password){
+            return res.status(400).json({message:"All fields are required"});
+        }
+
+        //2 to find user
+        const user=await User.findOne({
+            email:email.toLowerCase(),
+        });
+        if(!user){
+            return res.status(400).json({message:"User not found"});
+        }
+
+        //3 compare password
+        const isPasswordValid=await bcrypt.compare(password,user.password);
+        if(!isPasswordValid){
+            return res.status(401).json({message:"Invalid password"});
+        }
+
+        //4 login success
+        res.status(200).json({
+            message:"Login successful",
+            user:{id:user._id,email:user.email,username:user.username},
+        });
+
+    } catch (error) {
+        console.error("login error:",error);
+        res.status(500).json({message:"Internal Server Error",error:error.message,});
+    }
+};
+
+
+const logoutUser=async(req,res) => {
+    // logout user logic will go here
+    try {
+        const{email}=req.body;
+
+        const user=await User.findOne({email:email.toLowerCase()});
+        if(!user){
+            return res.status(404).json({message:"User not found"});
+        }
+
+        // if user found, proceed to logout
+        res.status(200).json({message:"Logout successful"});
+
+    } catch (error) {
+        res.status(500).json({message:"Internal Server Error",error:error.message,});
+    }
+}
 export{
-    registerUser// we need to export the constants so that we can use them in other files
+    registerUser,// we need to export the constants so that we can use them in other files
+    loginUser,
+    logoutUser, 
 }
