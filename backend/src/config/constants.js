@@ -1,0 +1,1 @@
+export const DB_NAME="intro to backend"// with use of DB_NAME we can directly connect to specific database no need to write repeatedly in code
