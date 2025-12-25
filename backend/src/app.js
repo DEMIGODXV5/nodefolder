@@ -15,11 +15,13 @@ app.use(express.json());//middleware to parse json request body
 
 //routes import
 import userRouter from "./routes/user.route.js";//importing user routes
+import postRouter from "./routes/post.route.js";//importing post routes
 
 
 
 //routes declaration
 app.use("/api/v1/users",userRouter);// all routes related to users will be prefixed with /api/v1/users
+app.use("/api/v1/posts",postRouter);// all routes related to posts will be prefixed with /api/v1/posts
 
 
 //example route :http://localhost:4000/api/v1/users/register 
